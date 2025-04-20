@@ -1,66 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Audio Loop Sync</title>
-  <style>
-    body {
-      background: #000;
-      color: #fff;
-      font-family: sans-serif;
-      text-align: center;
-      padding: 2rem;
-    }
-    #playButton {
-      display: none;
-      background-color: #1db954;
-      border: none;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      margin-top: 2rem;
-      cursor: pointer;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projection Audio</title>
 </head>
 <body>
-  <h1>🔊 Audio Playback</h1>
-  <p>This audio is synced with the projection. Tap play if needed.</p>
-
-  <audio id="audio" loop>
-    <source src="https://www.dropbox.com/scl/fi/pa9d9yuufl9kmzdwsryrv/audiocompressedmp4.mp3?raw=1" type="audio/mp3">
+  <h1>Projection Audio</h1>
+  <p>This is where the audio will play. It's synced with the projection video!</p>
+  
+  <!-- Audio Element -->
+  <audio id="audio" loop autoplay>
+    <source src="https://www.dropbox.com/scl/fi/pa9d9yuufl9kmzdwsryrv/audiocompressedmp4.mp3?rlkey=t9kmrl2reg52qygso2xuuj3t8&st=4mg0kepe&raw=1" type="audio/mp3">
     Your browser does not support the audio tag.
   </audio>
 
-  <button id="playButton">▶️ Tap to Play</button>
-
-  <script>
-    const audio = document.getElementById("audio");
-    const playButton = document.getElementById("playButton");
-
-    const loopLengthSeconds = 1 * 3600 + 35 * 60 + 24; // 1hr 35min 24s
-
-    function syncAudioTime() {
-      const now = new Date();
-      const secondsToday = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-      const offset = secondsToday % loopLengthSeconds;
-      audio.currentTime = offset;
-    }
-
-    function attemptPlay() {
-      syncAudioTime();
-      audio.play().catch(() => {
-        playButton.style.display = "inline-block";
-      });
-    }
-
-    playButton.addEventListener("click", () => {
-      syncAudioTime();
-      audio.play();
-      playButton.style.display = "none";
-    });
-
-    window.addEventListener("load", attemptPlay);
-  </script>
 </body>
 </html>
