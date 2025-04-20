@@ -19,13 +19,27 @@
     audio {
       margin-top: 1em;
     }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
   <h1>🔊 Audio Streaming Test</h1>
-  <p>The audio will start at the same point in the loop for everyone.</p>
+  <p>The audio will start from the correct point in the loop.</p>
 
-  <!-- Audio element -->
+  <!-- Button to start audio (fallback for mobile) -->
+  <button id="playButton">Play Audio</button>
+
+  <!-- Audio element with autoplay for desktops -->
   <audio id="audioElement" autoplay loop>
     <source src="https://www.dropbox.com/scl/fi/pa9d9yuufl9kmzdwsryrv/audiocompressedmp4.mp3?raw=1" type="audio/mp3" />
     Your browser does not support the audio element.
@@ -33,19 +47,40 @@
 
   <script>
     const audio = document.getElementById('audioElement');
+    const playButton = document.getElementById('playButton');
     const loopDuration = 5724; // Loop duration in seconds (1 hour 35 minutes 24 seconds)
 
-    window.addEventListener('load', () => {
+    // Function to start audio and sync it based on current time
+    const startAudio = () => {
       // Get current time of day in seconds (from midnight)
       const now = new Date();
-      const secondsSinceMidnight =
-        now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+      const secondsSinceMidnight = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
         
       // Calculate offset in the loop
       const offset = secondsSinceMidnight % loopDuration;
 
       // Sync audio to the calculated offset point in the loop
       audio.currentTime = offset;
+
+      // Play the audio
+      audio.play();
+    };
+
+    // Try to autoplay audio on desktop
+    window.addEventListener('load', () => {
+      // On load, attempt autoplay
+      try {
+        startAudio();
+      } catch (err) {
+        // If autoplay fails, show the play button for user interaction
+        playButton.style.display = 'block';
+      }
+    });
+
+    // Fallback: Button click to play audio on mobile or desktop if autoplay fails
+    playButton.addEventListener('click', () => {
+      startAudio();
+      playButton.style.display = 'none';  // Hide button after click
     });
   </script>
 </body>
