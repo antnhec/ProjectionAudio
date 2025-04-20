@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Film Audio</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2em;
+      background: #000;
+      color: #fff;
+    }
+    audio {
+      margin-top: 2em;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎬 Audio for the Window Film</h1>
+  <p>The film loops from 9:00 AM every day.<br>
+     Your audio is now synced to the current time.</p>
+
+  <audio id="audio" controls autoplay>
+    <source src="soundtrack.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const startHour = 9; // 9:00 AM
+    const loopLengthSeconds = 5700; // 1h 35m
+
+    const now = new Date();
+    const nowSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const startSeconds = startHour * 3600;
+    let offset = (nowSeconds - startSeconds) % loopLengthSeconds;
+
+    if (offset < 0) offset += loopLengthSeconds;
+
+    const audio = document.getElementById("audio");
+    audio.addEventListener('loadedmetadata', () => {
+      if (audio.duration > offset) {
+        audio.currentTime = offset;
+      }
+      audio.play();
+    });
+  </script>
+</body>
+</html>
