@@ -3,84 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Audio Streaming Test</title>
+  <title>Looped Audio Sync</title>
   <style>
     body {
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2em;
-      background-color: #111;
-      color: #fff;
-      text-align: center;
-    }
-    audio {
-      margin-top: 1em;
-    }
-    button {
-      padding: 10px 20px;
-      background-color: #4CAF50;
+      background: #111;
       color: white;
-      font-size: 16px;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 3rem;
+    }
+    #playButton {
+      display: none;
+      background: #4CAF50;
       border: none;
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      margin-top: 2rem;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #45a049;
+    #playButton:hover {
+      background: #45a049;
     }
   </style>
 </head>
 <body>
-  <h1>🔊 Audio Streaming Test</h1>
-  <p>The audio will start from the correct point in the loop.</p>
+  <h1>🔊 Audio Playback</h1>
+  <p>Audio synced with video loop. Tap play if it doesn't start automatically.</p>
+  <button id="playButton">▶️ Play Audio</button>
 
-  <!-- Button to start audio (fallback for mobile) -->
-  <button id="playButton">Play Audio</button>
-
-  <!-- Audio element with autoplay for desktops -->
-  <audio id="audioElement" autoplay loop>
-    <source src="https://www.dropbox.com/scl/fi/pa9d9yuufl9kmzdwsryrv/audiocompressedmp4.mp3?raw=1" type="audio/mp3" />
+  <audio id="audio" loop>
+    <source src="https://www.dropbox.com/scl/fi/pa9d9yuufl9kmzdwsryrv/audiocompressedmp4.mp3?raw=1" type="audio/mp3">
     Your browser does not support the audio element.
   </audio>
 
   <script>
-    const audio = document.getElementById('audioElement');
-    const playButton = document.getElementById('playButton');
-    const loopDuration = 5724; // Loop duration in seconds (1 hour 35 minutes 24 seconds)
+    const audio = document.getElementById("audio");
+    const button = document.getElementById("playButton");
 
-    // Function to start audio and sync it based on current time
-    const startAudio = () => {
-      // Get current time of day in seconds (from midnight)
+    const loopDuration = 1 * 3600 + 35 * 60 + 24; // 1h 35m 24s = 5724 seconds
+
+    function syncAudio() {
       const now = new Date();
-      const secondsSinceMidnight = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-        
-      // Calculate offset in the loop
-      const offset = secondsSinceMidnight % loopDuration;
-
-      // Sync audio to the calculated offset point in the loop
+      const secondsToday = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+      const offset = secondsToday % loopDuration;
       audio.currentTime = offset;
+    }
 
-      // Play the audio
+    function tryAutoplay() {
+      syncAudio();
+      audio.play().then(() => {
+        // success, do nothing
+      }).catch(() => {
+        // autoplay blocked, show button
+        button.style.display = "inline-block";
+      });
+    }
+
+    window.addEventListener("load", tryAutoplay);
+    button.addEventListener("click", () => {
+      syncAudio();
       audio.play();
-    };
-
-    // Try to autoplay audio on desktop
-    window.addEventListener('load', () => {
-      // On load, attempt autoplay
-      try {
-        startAudio();
-      } catch (err) {
-        // If autoplay fails, show the play button for user interaction
-        playButton.style.display = 'block';
-      }
-    });
-
-    // Fallback: Button click to play audio on mobile or desktop if autoplay fails
-    playButton.addEventListener('click', () => {
-      startAudio();
-      playButton.style.display = 'none';  // Hide button after click
+      button.style.display = "none";
     });
   </script>
 </body>
