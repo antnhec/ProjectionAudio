@@ -4,23 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projection Audio</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    button {
+      font-size: 1.5em;
+      padding: 1em 2em;
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
+
   <h1>Projection Audio</h1>
-  <p>This is where the audio will play. It's synced with the projection video!</p>
-  
-  <!-- Audio Element -->
-  <audio id="audio" loop autoplay>
+  <p>Tap the button below to hear the audio in sync with the video.</p>
+
+  <button onclick="document.getElementById('audio').play()">🔊 Start Audio</button>
+
+  <audio id="audio" loop>
     <source src="https://www.dropbox.com/scl/fi/pa9d9yuufl9kmzdwsryrv/audiocompressedmp4.mp3?rlkey=t9kmrl2reg52qygso2xuuj3t8&st=hrpumy7a&raw=1" type="audio/mp3">
-    Your browser does not support the audio tag.
+    Your browser does not support the audio element.
   </audio>
 
-  <script>
-    // Force audio to play on page load
-    window.onload = function() {
-      var audio = document.getElementById("audio");
-      audio.play();
-    };
-  </script>
 </body>
 </html>
