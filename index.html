@@ -15,5 +15,12 @@
     Your browser does not support the audio tag.
   </audio>
 
+  <script>
+    // Force audio to play on page load
+    window.onload = function() {
+      var audio = document.getElementById("audio");
+      audio.play();
+    };
+  </script>
 </body>
 </html>
